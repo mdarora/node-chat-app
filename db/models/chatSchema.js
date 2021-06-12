@@ -22,7 +22,10 @@ const chatSchema = new mongoose.Schema({
         }
     },
     lastMessage: {
-        message: String,
+        message: {
+            type: String,
+            default: 'No messages yet.'
+        },
         messageTime: {
             type: Date,
             default: Date.now
