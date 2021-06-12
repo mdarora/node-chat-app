@@ -38,6 +38,11 @@
             </div>
         </div>
         <ul id="chat-list" class="chats-list">
+            <% if (indexResponse !== '') { %>
+                <div class="response text-center text-danger py-4">
+                    <h4><%= indexResponse %></h4>
+                </div>
+            <% } %>
             <div id="res-area" class="res no-chats" hidden>
                 <h4 id="res-text"></h4>
                 <p>Click on "<i class="fas fa-user-plus"></i>" icon above to start new chat</p>

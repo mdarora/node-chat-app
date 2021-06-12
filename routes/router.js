@@ -24,11 +24,11 @@ const transporter = nodemailer.createTransport({
 
 const io = global.socketio;
 
-    
+let indexResponse = '';
     
 ///////////////////////////-Routes-/////////////////////////////////////
 router.get('/', loginAuth, (req, res) =>{
-    res.render('index');
+    res.render('index', {indexResponse: indexResponse});
 });
 
 router.get('/chat', loginAuth, (req, res) =>{
@@ -95,22 +95,25 @@ router.post('/searchUsers', loginAuth, async (req, res) =>{
     }
 });
 
-router.post('/addChat', loginAuth, async (req,res)=>{
+router.get('/addChat/:id', loginAuth, async (req,res)=>{
     const loggedUserId = req.id;
     const loggedUserName = req.name;
-    const otherUserId = req.body.otherUserId;
+    const otherUserId = req.params.id;
     
     if ( !loggedUserId || !otherUserId){
-        return res.status(422).json({error: 'Invalid user id'});
+        indexResponse = 'Invalid request.';
+        return res.redirect('/');
     } else if (loggedUserId === otherUserId){
-        return res.status(422).json({error: 'Invalid request'});
+        indexResponse = 'Invalid request.';
+        return res.redirect('/');
     }
 
     try {
         const findById = await User.findOne({_id: otherUserId});
         
         if(!findById){
-            return res.status(404).json({error: 'User not found'});
+            indexResponse = 'User not found.';
+            return res.redirect('/');
         };
 
         const findChatByMembers = await Chat.findOne({$and: [
@@ -123,7 +126,8 @@ router.post('/addChat', loginAuth, async (req,res)=>{
         ]});
         
         if(findChatByMembers){
-            return res.status(422).json({error: 'Chat already exist'});
+            indexResponse = 'Chat already exist.';
+            return res.redirect('/');
         }
 
         const newChat = new Chat({
@@ -137,12 +141,14 @@ router.post('/addChat', loginAuth, async (req,res)=>{
             },
         });
         const saveChat = await newChat.save();
-        return res.status(201).json({message: `${findById.name} added to your chats.`});
+        indexResponse = '';
+        return res.redirect('/');
         
 
     } catch (error) {
         console.log(error.name , error.message);
-        return res.status(500).json({error: 'Something went wrong!'});
+        indexResponse = 'Something went wrong!';
+        return res.redirect('/');
     }
 
 });
