@@ -1,0 +1,60 @@
+<%- include('layout/header', {title: 'Register', cssFile: 'styles/register.css'}) -%>
+    <main>
+        <section class="register-section">
+            <div class="container">
+                <div class="register-area">
+        
+                    <h4>Register</h4>
+                    <div class="register-form-area">
+                        <form id='reg-form' method="post" >
+        
+                            <div class="input-field">
+                                <input type="name" name="name" id="register-name" placeholder="Enter full name" autoComplete="off"  required/>
+                            </div>
+                            <div class="input-field">
+                                <input type="email" name="email" id="register-email" placeholder="Enter E-mail" autoComplete="off"  required/>
+                            </div>
+                            <div class="input-field">
+                                <input type="password" name="password" id="register-password" placeholder="Enter Password" autoComplete="off"  required/>
+                            </div>
+                            <div class="input-field">
+                                <input type="password" name="cpassword" id="register-Cpassword" placeholder="Confirm Password" autoComplete="off" required/>
+                            </div>
+        
+                            <div class="show-forgot-password">
+                                <div class="show-pass">
+                                    <input type="checkbox" name="show-pass" id="show-pass" />
+                                    <label for='show-pass'>Show Password</label>
+                                </div>
+                            </div>
+
+                            <div class="res text-danger">
+                                <span id='resText'><%= error %></span>
+                            </div>
+        
+                            <div class="form-btn-container">
+                                <button class="form-btn" type="submit">Get OTP</button>
+                            </div>
+                        </form>
+        
+        
+                        <form id='otp-form' method="post" hidden>
+                            <div class="input-field">
+                                <input type="number" name="otp" id="otp" placeholder="Enter OTP" min='0' autoComplete="off"  required/>
+                            </div>
+        
+                            <div class="form-btn-container">
+                                <button class="form-btn" type="submit">Submit OTP</button>
+                            </div>
+                        </form>
+        
+                    </div>
+                    <div class="register-link">
+                        Already have an account? <a href="/login">Login</a>
+                    </div>
+                </div>
+            </div>
+        </section> 
+    </main>
+
+<%- include('layout/footer', {jsFile: 'scripts/register.js'}) -%>

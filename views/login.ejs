@@ -1,0 +1,48 @@
+<%- include('layout/header', {title: 'Login', cssFile: 'styles/login.css'}) -%>
+    <main>
+        <section class="login-section">
+            <div class="container">
+                <div class="login-area">
+    
+                    <h4>Login</h4>
+                    <div class="login-form-area">
+                        <form id="login-form" method="post">
+                            <div class="input-field">
+                                <input type="email" name="email" id="login-email" placeholder="Enter E-mail" autoComplete="off" />
+                            </div>
+                            <div class="input-field">
+                                <input type="password" name="password" id="login-password" placeholder="Enter Password" autoComplete="off"/>
+                            </div>
+                            <div class="show-forgot-password">
+                                <div class="show-pass">
+                                    <input type="checkbox" name="show-pass" id="show-pass"/>
+                                    <label for='show-pass'>Show Password</label>
+                                </div>
+                                <div class="forgot-pass">
+                                    <a href="/reset-password">Forgot Password ?</a>
+                                </div>
+                            </div>
+                            
+                            <% if(loginPageResponse === 'Registerated successfully' || loginPageResponse === 'Password reset successful' ) { %>
+                                <div class="res text-success">
+                            <% } else { %>
+                                <div class="res text-danger">
+                            <% } %>
+                                    <span id='resText'><%= loginPageResponse %></span>
+                                </div>
+
+                            <div class="form-btn-container">
+                                <button class="form-btn" type="submit">Login</button>
+                            </div>
+    
+                        </form>
+                    </div>
+                    <div class="register-link">
+                        Don't have an account? <a href="/register">Register</a>
+                    </div>
+                </div>
+            </div>
+        </section>  
+    </main>
+
+<%- include('layout/footer', {jsFile: 'scripts/login.js'}) -%>

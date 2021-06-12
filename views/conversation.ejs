@@ -1,0 +1,117 @@
+<%- include('layout/header', {title: 'Chat App', cssFile: 'styles/conversation.css'}) -%>
+
+<main>
+    <section id='conversation' class='conv-section'>
+
+        <div class="conv-header conv-childs">
+            <div class="conv-header-title">
+                <div class="backLink">
+                    <a href='/'>
+                        <i class="fas fa-arrow-left"></i>
+                    </a>
+                </div>
+                <div class="conv-avtaar">
+                    <i class="fas fa-user-circle"></i>
+                </div>
+                <div class="conv-content">
+                    <h5 class='conv-with'>MD Arora</h5>
+                    <p class="conv-status">Offline</p>
+                </div>
+            </div>
+            <div class="conv-header-btns">
+                <ul>
+                    <li class="conv-header-btn">
+                        <i class="fas fa-ellipsis-v"></i>
+                    </li>
+                </ul>
+            </div>
+        </div>
+
+        <div class='conv-messages conv-childs'>
+            <ul ref={messagesList} class='messages-list'>
+
+                <li class='log-user'>
+                    <p class='conv-message'>{message} <br/> 
+                        <span class='message-time'>{messageTime}</span>
+                    </p>
+                </li>
+
+                <li class='other-user'>
+                    <p class='conv-message'>{message} <br/> 
+                        <span class='message-time'>{messageTime}</span>
+                    </p>
+                </li>
+
+                <li class='log-user'>
+                    <p class='conv-message'>{message} <br/> 
+                        <span class='message-time'>{messageTime}</span>
+                    </p>
+                </li>
+
+                <li class='log-user'>
+                    <p class='conv-message'>{message} <br/> 
+                        <span class='message-time'>{messageTime}</span>
+                    </p>
+                </li>
+
+                <li class='other-user'>
+                    <p class='conv-message'>{message} <br/> 
+                        <span class='message-time'>{messageTime}</span>
+                    </p>
+                </li>
+
+                <li class='other-user'>
+                    <p class='conv-message'>{message} <br/> 
+                        <span class='message-time'>{messageTime}</span>
+                    </p>
+                </li>
+
+                <li class='other-user'>
+                    <p class='conv-message'>{message} <br/> 
+                        <span class='message-time'>{messageTime}</span>
+                    </p>
+                </li>
+
+                <li class='other-user'>
+                    <p class='conv-message'>{message} <br/> 
+                        <span class='message-time'>{messageTime}</span>
+                    </p>
+                </li>
+
+                <li class='other-user'>
+                    <p class='conv-message'>{message} <br/> 
+                        <span class='message-time'>{messageTime}</span>
+                    </p>
+                </li>
+
+                <li class='other-user'>
+                    <p class='conv-message'>{message} <br/> 
+                        <span class='message-time'>{messageTime}</span>
+                    </p>
+                </li>
+
+                <li class='other-user'>
+                    <p class='conv-message'>{message} <br/> 
+                        <span class='message-time'>{messageTime}</span>
+                    </p>
+                </li>
+
+                <li class='other-user'>
+                    <p class='conv-message'>{message} <br/> 
+                        <span class='message-time'>{messageTime}</span>
+                    </p>
+                </li>
+
+            </ul>
+        </div>
+
+        <div class="conv-footer conv-childs">
+            <form onSubmit={sendMessage} method="post">
+                <input class='message-input' type="text" name="message" id="message" placeholder='Write your message...' required/>
+                <button type="submit"> <i class="fas fa-paper-plane"></i> </button>
+            </form>
+        </div>
+    </section>
+</main>
+
+<%- include('layout/footer', {jsFile: 'scripts/conversation.js'}) -%>

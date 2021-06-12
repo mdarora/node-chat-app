@@ -1,0 +1,37 @@
+<%- include('layout/header', {title: 'Register', cssFile: 'styles/register.css'}) -%>
+    <main>
+        <section class="register-section">
+            <div class="container">
+                <div class="register-area">
+        
+                    <h4>Register</h4>
+                    <div class="register-form-area">
+
+                        <form id='otp-form' method="post">
+                            <div class="input-field">
+                                <input type="number" name="otp" id="otp" placeholder="Enter OTP" min='0' autoComplete="off"  required/>
+                            </div>
+
+                            <% if(response === 'Invalid OTP' || response === 'Something went wrong!') { %>
+                                <div class="res text-danger">
+                            <% } else { %>
+                                <div class="res text-success">
+                            <% } %>
+                                    <span id='resText'><%= response %></span>
+                                </div>
+        
+                            <div class="form-btn-container">
+                                <button class="form-btn" type="submit">Submit OTP</button>
+                            </div>
+                        </form>
+        
+                    </div>
+                    <div class="register-link">
+                        Already have an account? <a href="/login">Login</a>
+                    </div>
+                </div>
+            </div>
+        </section> 
+    </main>
+
+<%- include('layout/footer', {jsFile: 'scripts/register.js'}) -%>

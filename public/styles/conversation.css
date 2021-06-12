@@ -1,0 +1,207 @@
+.conv-section{
+    padding: 0;
+    max-height: 100vh;
+    min-height: 100vh;
+    display: flex;
+    justify-content: space-between;
+    flex-direction: column;
+    overflow-x: hidden;
+    overflow-y: auto;
+    background-color: var(--dark-background);
+}
+ /* ******************************* */
+.start-conv{
+    height: 100%;
+    color: #fff;
+    text-align: center;
+    display: flex;
+    flex-grow: 1;
+    align-items: center;
+    flex-direction: column;
+    justify-content: center;
+}
+.start-conv figure{
+    padding: 0;
+    margin: 0;
+}
+.start-conv figure svg{
+    font-size: 8rem;
+}
+.start-conv h3{
+    margin-bottom: 2rem;
+}
+.start-conv p{
+    color: #727272;
+    font-size: 1.4rem;
+    margin-bottom: .5rem;
+}
+.start-conv h6{
+    font-size: 1.6rem;
+}
+.start-conv button{
+    font-size: 1.4rem;
+}
+
+/* ************************************* */
+.conv-header{
+    padding: 1rem 1.5rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background-color: var(--dark-background);
+    border-bottom:1px solid var(--dark-background-2);
+
+}
+.conv-header-title{
+    display: flex;
+    align-items: center;
+    text-decoration: none;
+    transition: all .3s;
+
+}
+.conv-header-title .backLink{
+    margin-right: 2rem;
+}
+.conv-header-title .backLink i{
+    font-size: 1.5rem;
+}
+
+.conv-header-title .conv-avtaar i{
+    color: #f5f5f5;
+    font-size: 3rem;
+}
+.conv-content{
+    padding-left: 1rem;
+    flex-grow: 1;
+}
+.conv-content .conv-with{
+    color: #fff;
+    margin-bottom: 0;
+}
+.conv-content .conv-status{
+    font-size: 1.2rem;
+    color: #727272;
+    margin-top: .5rem;
+    margin-bottom: 0;
+}
+
+.conv-header-btns ul{
+    color: #fff;
+    list-style: none;
+    display: flex;
+    align-items: center;
+    padding: 0;
+    margin: 0;
+
+}
+.conv-header-btns ul li{
+    margin-left: 1rem;
+    margin-bottom: 0;
+
+}
+.conv-header-btns ul li i{
+    color: #ffffff50;
+    font-size: 1.5rem;
+    transition: all .3s;
+    cursor: pointer;
+}
+.conv-header-btns ul li i:hover{
+    color: #ffffff;
+}
+
+.conv-messages{
+    overflow-x: hidden;
+    overflow-y: scroll;
+    flex-grow: 1;
+    padding: 1rem 1.8rem 0 1.8rem;
+}
+.conv-messages::-webkit-scrollbar{
+    width: .5rem;
+}
+.conv-messages::-webkit-scrollbar-thumb{
+    background-color: var(--dark-background-3);
+}
+
+.messages-list{
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    list-style: none;
+    margin-bottom: 0;
+
+}
+
+.messages-list li p.conv-message{
+    padding: .5rem 1rem;
+    font-size: 1.4rem;
+    border-radius: .5rem;
+    display: inline-block;
+    /* max-width: 90%; */
+    clear: both;
+}
+.messages-list li p.conv-message .message-time{
+    display: block;
+    font-size: 1.2rem;
+    margin-top: 1rem;
+}
+.messages-list li.log-user{
+    align-self: flex-end;
+    margin-left: 8rem;
+}
+.messages-list li.log-user p{
+    color: #ffffff;
+    background-color: var(--theme-color);
+}
+.messages-list li.log-user p .message-time{
+    color: var(--dark-background-3);
+}
+
+.messages-list li.other-user{
+    align-self: flex-start;
+    margin-right: 8rem;
+}
+.messages-list li.other-user p{
+    color: #ffffffbf;
+    background-color: var(--dark-background-3);
+}
+.messages-list li.other-user p .message-time{
+    color: var(--theme-color);
+    text-align: right;
+}
+
+.conv-footer{
+    margin-top: 1rem;
+    border-top: 1px solid var(--dark-background-2);
+    background-color: var(--dark-background);
+
+}
+.conv-footer form{
+    padding: 1rem 1.5rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+.conv-footer form input.message-input{
+    color: #ffffff;
+    flex-grow: 1;
+    border: none;
+    padding: 1rem;
+    outline: none;
+    font-size: 1.4rem;
+    border-radius: .5rem;
+    background-color: var(--dark-background-2);
+}
+.conv-footer form button{
+    color: #ffffff;
+    border: none;
+    outline: none;
+    flex-grow: 0;
+    padding: 1rem 1.5rem 1rem 1.2rem;
+    margin-left: 1rem;
+    border-radius: .5rem;
+    background-color: var(--theme-color);
+
+}
+.conv-footer form button i{
+    font-size: 1.5rem;
+}
