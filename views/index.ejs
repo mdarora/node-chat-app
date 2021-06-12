@@ -65,18 +65,18 @@
                 <div class="modal-body">
 
                     <div class="new-chat-search">
-                        <form onSubmit={searchUsers}>
-                            <input type="search" name="user" id="search" placeholder='Search user' required/>
+                        <form id='searchUserForm'>
+                            <input type="text" name="user" id="search" placeholder='Search user' required/>
                             <button type="submit"><i class="fas fa-search"></i></button>
                         </form>
                     </div>
 
-                    <ul class='new-users-list'>
-                        <figure id='userListSpinner' hidden>
-                            <img src="/images/Spinner-blue.svg" alt="Loading spinner" width="30">
-                        </figure>
-                        <h5 id='new-search-res'>Start Searching.</h5>
+                    <ul id="new-users-list" class='new-users-list'>
                     </ul>
+                    <figure id='userListSpinner' hidden>
+                        <img src="/images/Spinner-blue.svg" alt="Loading spinner" width="30">
+                    </figure>
+                    <h5 id='new-search-res'>Start Searching.</h5>
 
                 </div>
                 

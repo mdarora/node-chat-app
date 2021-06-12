@@ -222,7 +222,11 @@ main{
     padding: 1rem 0;
     list-style: none;
 }
-.modal-body .new-users-list #new-search-res{
+.modal-body .chats-list-item a:hover{
+    border-radius: .5rem;
+    background-color: var(--dark-background-2);
+}
+.modal-body #new-search-res, .modal-body #userListSpinner{
     padding-top: 1rem;
     text-align: center;
 }
