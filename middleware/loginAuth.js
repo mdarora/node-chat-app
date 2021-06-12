@@ -3,6 +3,7 @@ const jwt = require('jsonwebtoken');
 const loginAuth = (req, res, next) =>{
     const jwtoken = req.cookies.jwtoken;
     if (!jwtoken){
+        res.status(422).json({loginError: 'Login first'});
         return res.redirect('/login');
     }
 
