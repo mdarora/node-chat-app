@@ -24,7 +24,7 @@
             <div class="title">
                 <h2>Chats</h2>
                 <div class="menu">
-                    <span title='Start new Chat' > <i class="fas fa-user-plus"></i> </span>
+                    <span title='Start new Chat' data-toggle="modal" data-target="#searchUsers" > <i class="fas fa-user-plus"></i> </span>
                     <span>
                         <i class="fas fa-ellipsis-v"></i>
                     </span>
@@ -37,104 +37,52 @@
                 </form>
             </div>
         </div>
-        <ul class="chats-list">
-
-            <li class="chats-list-item" >
-                <a href="#" >
-                  <div class="Chat-avtaar" >
-                        <figure>
-                            <i class="fas fa-user-circle"></i>
-                        </figure>
-                  </div>
-                  <div class="chat-content  text-truncate" >
-                      <h5 class='chat-name text-truncate' >
-                        MD Arora 
-                        <span  class='last-message-time'>10:23 pm</span>
-                      </h5>
-                      <p class="chat-last-msg text-truncate" >
-                        Lorem ipsum dolor sit amet, consectetur adipisicing elit. Debitis nulla, voluptates nobis similique magni a ab dolorum sunt numquam dolorem minima ullam nisi quisquam dignissimos, libero in eum voluptate eos sit odio! Praesentium sed saepe maiores. Eaque quisquam excepturi enim numquam labore unde veritatis corporis.
-                      </p>
-                  </div>
-                </a>
-            </li>
-            
-            <li class="chats-list-item" >
-                <a href="#" >
-                  <div class="Chat-avtaar" >
-                        <figure>
-                            <i class="fas fa-user-circle"></i>
-                        </figure>
-                  </div>
-                  <div class="chat-content  text-truncate" >
-                      <h5 class='chat-name text-truncate' >
-                        MD Arora 
-                        <span  class='last-message-time'>10:23 pm</span>
-                      </h5>
-                      <p class="chat-last-msg text-truncate" >
-                        Lorem ipsum dolor sit amet, consectetur adipisicing elit. Debitis nulla, voluptates nobis similique magni a ab dolorum sunt numquam dolorem minima ullam nisi quisquam dignissimos, libero in eum voluptate eos sit odio! Praesentium sed saepe maiores. Eaque quisquam excepturi enim numquam labore unde veritatis corporis.
-                      </p>
-                  </div>
-                </a>
-            </li>
-            <li class="chats-list-item" >
-                <a href="#" >
-                  <div class="Chat-avtaar" >
-                        <figure>
-                            <i class="fas fa-user-circle"></i>
-                        </figure>
-                  </div>
-                  <div class="chat-content  text-truncate" >
-                      <h5 class='chat-name text-truncate' >
-                        MD Arora 
-                        <span  class='last-message-time'>10:23 pm</span>
-                      </h5>
-                      <p class="chat-last-msg text-truncate" >
-                        Lorem ipsum dolor sit amet, consectetur adipisicing elit. Debitis nulla, voluptates nobis similique magni a ab dolorum sunt numquam dolorem minima ullam nisi quisquam dignissimos, libero in eum voluptate eos sit odio! Praesentium sed saepe maiores. Eaque quisquam excepturi enim numquam labore unde veritatis corporis.
-                      </p>
-                  </div>
-                </a>
-            </li>
-            <li class="chats-list-item" >
-                <a href="#" >
-                  <div class="Chat-avtaar" >
-                        <figure>
-                            <i class="fas fa-user-circle"></i>
-                        </figure>
-                  </div>
-                  <div class="chat-content  text-truncate" >
-                      <h5 class='chat-name text-truncate' >
-                        MD Arora 
-                        <span  class='last-message-time'>10:23 pm</span>
-                      </h5>
-                      <p class="chat-last-msg text-truncate" >
-                        Lorem ipsum dolor sit amet, consectetur adipisicing elit. Debitis nulla, voluptates nobis similique magni a ab dolorum sunt numquam dolorem minima ullam nisi quisquam dignissimos, libero in eum voluptate eos sit odio! Praesentium sed saepe maiores. Eaque quisquam excepturi enim numquam labore unde veritatis corporis.
-                      </p>
-                  </div>
-                </a>
-            </li>
-
+        <ul id="chat-list" class="chats-list">
+            <div id="res-area" class="res no-chats" hidden>
+                <h4 id="res-text"></h4>
+                <p>Click on "<i class="fas fa-user-plus"></i>" icon above to start new chat</p>
+            </div>
+            <div id="spinner">
+                <figure class="text-center py-5">
+                    <img src="/images/Spinner-blue.svg" alt="Loading spinner" width="30">
+                </figure>
+            </div>
         </ul>
 
-        <!-- <Modal show={show} onHide={() => setShow(false)} centered>
-            <Modal.Header closeButton>
-                <Modal.Title>Start new chat</Modal.Title>
-            </Modal.Header>
-            <ModalBody scrollable='true'>
-                <div class="new-chat-search">
-                    <form onSubmit={searchUsers}>
-                        <input type="search" name="user" id="search" placeholder='Search user' required/>
-                        <button type="submit"><Search/></button>
-                    </form>
+
+        <!-- The Modal -->
+        <div class="modal fade" id="searchUsers">
+            <div class="modal-dialog modal-dialog-scrollable modal-dialog-centered">
+            <div class="modal-content">
+            
+                <!-- Modal Header -->
+                <div class="modal-header">
+                <h1 class="modal-title">Start new chat</h1>
+                <button type="button" class="close" data-dismiss="modal">×</button>
                 </div>
-                <ul class='new-users-list'>
-                <figure id='userListSpinner' hidden>
-                    <img src={spinner} alt="Loading Spinner" width='30' />
-                </figure>
-                    <h5 id='new-search-res'>Start Searching.</h5>
-                    {userList}
-                </ul>
-            </ModalBody>
-        </Modal> -->
+                
+                <!-- Modal body -->
+                <div class="modal-body">
+
+                    <div class="new-chat-search">
+                        <form onSubmit={searchUsers}>
+                            <input type="search" name="user" id="search" placeholder='Search user' required/>
+                            <button type="submit"><i class="fas fa-search"></i></button>
+                        </form>
+                    </div>
+
+                    <ul class='new-users-list'>
+                        <figure id='userListSpinner' hidden>
+                            <img src="/images/Spinner-blue.svg" alt="Loading spinner" width="30">
+                        </figure>
+                        <h5 id='new-search-res'>Start Searching.</h5>
+                    </ul>
+
+                </div>
+                
+            </div>
+            </div>
+        </div>
 
     </section>
 

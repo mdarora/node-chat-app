@@ -114,11 +114,12 @@ main{
 .no-chats{
     color: #fff;
     padding: 1rem 0;
+    margin: 2rem 0;
     text-align: center;
 }
 .no-chats p{
     color: #727272;
-    font-size: 1.2rem;
+    font-size: 1.4rem;
 }
 
 .chats-list-item{
@@ -170,17 +171,17 @@ main{
     margin-bottom: 0;
 }
 
-.chats-search{
+.chats-search, .modal-body .new-chat-search{
     border-radius: .5rem;
     background-color: var(--dark-background-2);
 
 }
-.chats-search form{
+.chats-search form, .modal-body .new-chat-search form{
     display: flex;
     align-items: center;
     
 }
-.chats-search form input, .chats-search form button{
+.chats-search form input, .chats-search form button, .modal-body .new-chat-search form input, .modal-body .new-chat-search form button{
     color: #fff;
     flex-grow: 1;
     border: none;
@@ -189,41 +190,39 @@ main{
     font-size: 1.2rem;
     background: transparent;
 }
-.chats-search form button{
+.chats-search form button, .modal-body .new-chat-search form button{
     flex-grow: 0;
     padding: .8rem 1.5rem;
 }
-.chats-search form button i{
+.chats-search form button i, .modal-body .new-chat-search form button i{
     color: #ffffff50;
     font-size: 1.5rem;
 }
-.chats-search form button i:hover{
+.chats-search form button i:hover, .modal-body .new-chat-search form button i:hover{
     color: #ffffff;
 }
 
-/* .modal-content{
+
+/* *********************************** */
+.modal-content{
     color: #fff;
     background-color: var(--dark-background-3);
-    .modal-header{
-        border-bottom-color: var(--theme-color) ;
-        .close{
-            font-size: 2rem;
-            color: #fff;
-            text-shadow: none;
-        }
-    }
-    .modal-body{
-        .new-chat-search{
-            @extend .chats-search;
-        }
-        .new-users-list{
-            margin: 0;
-            padding: 1rem 0;
-            list-style: none;
-            #new-search-res{
-                padding-top: 1rem;
-                text-align: center;
-            }
-        }
-    }
-} */
+}
+.modal-content .modal-header{
+    align-items: center;
+    border-bottom-color: var(--theme-color) ;
+}
+.modal-content .modal-header .close{
+    font-size: 2rem;
+    color: #fff;
+    text-shadow: none;
+}
+.modal-body .new-users-list{
+    margin: 0;
+    padding: 1rem 0;
+    list-style: none;
+}
+.modal-body .new-users-list #new-search-res{
+    padding-top: 1rem;
+    text-align: center;
+}
