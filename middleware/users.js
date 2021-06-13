@@ -8,7 +8,6 @@ const addUser = (id, room) => {
     if(existingUser) return {user};
 
     users.push(user);
-    console.log(users);
 
     return { user };
 }
