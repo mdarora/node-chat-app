@@ -33,7 +33,7 @@ router.get("/getChats", loginAuth, async  (req, res)=>{
             {"member2.id": {
                 $eq : loggedUserId
             }}
-        ]}).sort({"lastMessage.messageTime": -1});
+        ]}).sort({updatedAt: -1});
             
         if(!getChats){
             return res.status(404).json({error: 'No chats found'});
@@ -188,7 +188,8 @@ router.post('/chat/:id', loginAuth, async (req, res)=>{
 /////////////////////////////////////////////////////////////
 
 io.on('connection', socket =>{
-    socket.removeAllListeners();
+    console.log('a new connection', socket.id);
+    
     
     socket.on('join', (roomId) =>{
         const user = addUser(socket.id, roomId);
@@ -205,8 +206,8 @@ io.on('connection', socket =>{
         });
         const savedMsg = await newMessage.save();
         
-        await Chat.updateOne({lastMessage:{$set: {message: newMessage.body}}});
-
+        const chatUpdate = await Chat.updateOne({_id: savedMsg.chatId},{$set: {lastMessage: savedMsg.body}});
+        
         const roomusers = getUsersInRoom(user.room);
         if(roomusers.length === 2){
             const otherUser = roomusers[0].id !==  user.id ? roomusers[0].id : roomusers[1].id;
