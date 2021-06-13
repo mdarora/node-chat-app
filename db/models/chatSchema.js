@@ -22,20 +22,10 @@ const chatSchema = new mongoose.Schema({
         }
     },
     lastMessage: {
-        message: {
-            type: String,
-            default: 'No messages yet.'
-        },
-        messageTime: {
-            type: Date,
-            default: Date.now
-        }
-    },
-    dateCreated: {
-        type: Date,
-        default: Date.now
+        type: String,
+        default: 'No messages yet.'
     }
-});
+}, {timestamps: true});
 
 const Chat = new mongoose.model('Chat', chatSchema);
 
