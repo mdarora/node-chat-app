@@ -25,6 +25,7 @@ socket.on('receive', (message)=>{
             <span class='message-time'>${messageTime}</span>
         </p>
     </li>`;
+    document.querySelector('#messages-list > li:last-child').scrollIntoView();
     
 });
 
@@ -44,7 +45,7 @@ document.getElementById('message-form').addEventListener('submit', (e)=>{
                 <span class='message-time'>${messageTime}</span>
             </p>
         </li>`;
-        
+        document.querySelector('#messages-list > li:last-child').scrollIntoView();
     }
     
 });
