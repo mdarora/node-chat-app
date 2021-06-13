@@ -28,7 +28,7 @@ app.use(require("./routes/router"));
 
 
 require('./db/dbConn');
-server.listen(process.env.PORT, ()=>{
+server.listen(process.env.PORT, process.env.HOSTNAME,  ()=>{
     console.log(`Listening on port : ${process.env.PORT}`); 
 });
 
