@@ -23,22 +23,17 @@ const getChats = async () =>{
         else if (result.message) {
             spinner.hidden = true;
             resArea.hidden = true;
+            console.log(result.message);
+            
             const allChats = result.message.map((element, index) =>{
 
-                const {member1, member2, lastMessage, _id} = element;
-                let lastmessageTime = new Date(lastMessage.messageTime).toLocaleTimeString();
-
-                let lastMsg;
-                if(!lastMessage.message){
-                    lastMsg = 'No messages yet.';
-                } else {
-                    lastMsg = lastMessage.message;
-                }
+                const {member1, member2, lastMessage, updatedAt, _id} = element;
+                let updatedTime = new Date(updatedAt).toLocaleTimeString();
 
                 if(result.loggedUserId === member1.id){
-                    return {_id, lastMsg, lastmessageTime, name : member2.name}
+                    return {_id, lastMessage, updatedTime, name : member2.name}
                 } else {
-                    return {_id, lastMsg, lastmessageTime, name : member1.name}
+                    return {_id, lastMessage, updatedTime, name : member1.name}
                 }
             });
 
@@ -56,10 +51,10 @@ const getChats = async () =>{
                            <div class="chat-content  text-truncate" >
                                 <h5 class='chat-name text-truncate' >
                                         ${element.name}
-                                        <span  class='last-message-time'>${element.lastmessageTime}</span>
+                                        <span  class='last-message-time'>${element.updatedTime}</span>
                                 </h5>
                                 <p class="chat-last-msg text-truncate" >
-                                        ${element.lastMsg}
+                                        ${element.lastMessage}
                                 </p>
                            </div>
                          </a>
