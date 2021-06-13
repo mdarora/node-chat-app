@@ -11,16 +11,6 @@ const Message = require('../db/models/messageSchema');
 
 const { addUser, removeUser, getUser, getUsersInRoom } = require('../middleware/users');
 
-const transporter = nodemailer.createTransport({
-    service : 'gmail',
-    auth : {
-        user : process.env.MAIL,
-        pass : process.env.MAIL_PASS
-    }
-});
-
-
-
 
 const io = global.socketio;
 
@@ -29,10 +19,6 @@ let indexResponse = '';
 ///////////////////////////-Routes-/////////////////////////////////////
 router.get('/', loginAuth, (req, res) =>{
     res.render('index', {indexResponse: indexResponse});
-});
-
-router.get('/chat', loginAuth, (req, res) =>{
-    res.render('conversation');
 });
 
 router.get("/getChats", loginAuth, async  (req, res)=>{
@@ -153,49 +139,14 @@ router.get('/addChat/:id', loginAuth, async (req,res)=>{
 
 });
 
-
-router.post('/getMessages', loginAuth, async (req, res) =>{
-    const loggedUserId = req.id;
-    // const loggedUserName = req.name;
-    const chatId = req.body.chatId;
+let loggedUserId;
+let loggedUserName;
+router.get('/chat/:id', loginAuth, async (req, res) =>{
+    loggedUserId = req.id;
+    loggedUserName = req.name;
+    const chatId = req.params.id;
     let chatName;
 
-    io.on('connection', socket =>{
-        socket.removeAllListeners();
-        console.log('Connection found', socket.id);
-        
-        socket.on('join', (roomId) =>{
-            const user = addUser(socket.id, roomId);
-            
-            socket.join(user.room);
-        });
-
-        socket.on('send', async (message)=>{
-            const user = getUser(socket.id);
-
-            const newMessage = new Message({
-                chatId: message.chatId,
-                from: message.from,
-                body: message.body
-            });
-            await newMessage.save();
-
-            await Chat.updateOne({lastMessage:{$set: {message: newMessage.body}}});
-
-            const roomusers = getUsersInRoom(user.room);
-            if(roomusers.length === 2){
-                const otherUser = roomusers[0].id !==  user.id ? roomusers[0].id : roomusers[1].id;
-                socket.to(otherUser).emit('receive', message);
-            }
-            
-        });
-
-        socket.on('disconnect', () =>{
-            console.log('client disconnected', socket.id);
-            socket.removeAllListeners();
-            removeUser(socket.id);
-        });
-    });
     
     try {
         const FindChatById = await Chat.findOne({_id: chatId});
@@ -205,17 +156,71 @@ router.post('/getMessages', loginAuth, async (req, res) =>{
             chatName = FindChatById.member1.name;
         }
         
-        const messages = await Message.find({chatId});
-        if(!messages || messages.length === 0){
-            res.status(404).json({error: "No messages yet.", chatName, loggedUserId});
-        } else{
-            res.status(200).json({messages, chatName, loggedUserId});
-        }
+        return res.render('conversation', {chatName});
+
     } catch (error) {
         console.log(error);
-        res.status.json({error: 'Something went wrong!', chatName, loggedUserId});
+        return res.render('conversation', {chatName});
     }
 });
+
+
+router.post('/chat/:id', loginAuth, async (req, res)=>{
+
+    const chatId = req.params.id;
+    try {
+        const messages = await Message.find({chatId});
+        if(!messages || messages.length === 0){
+            return res.status(404).json({error: 'No messages yet.'});
+        }
+        
+        return res.status(200).json({messages, loggedUserId});
+
+    } catch (error) {
+        console.log(error);
+        return res.status(200).json({messages, loggedUserId});
+    }
+    
+
+});
+
+
+/////////////////////////////////////////////////////////////
+
+io.on('connection', socket =>{
+    socket.removeAllListeners();
+    
+    socket.on('join', (roomId) =>{
+        const user = addUser(socket.id, roomId);
+        socket.join(user.room);
+    });
+
+    socket.on('send', async (message)=>{
+        const user = getUser(socket.id);
+
+        const newMessage = new Message({
+            chatId: message.chatId,
+            from: {id: loggedUserId, name : loggedUserName},
+            body: message.body
+        });
+        const savedMsg = await newMessage.save();
+        
+        await Chat.updateOne({lastMessage:{$set: {message: newMessage.body}}});
+
+        const roomusers = getUsersInRoom(user.room);
+        if(roomusers.length === 2){
+            const otherUser = roomusers[0].id !==  user.id ? roomusers[0].id : roomusers[1].id;
+            socket.to(otherUser).emit('receive', savedMsg);
+        }
+        
+    });
+
+    socket.on('disconnect', () =>{
+        console.log('client disconnected', socket.id);
+        removeUser(socket.id);
+    });
+});
+
 
 
 module.exports = router;
