@@ -2,6 +2,11 @@ const socket = io();
 const messageResponse = document.getElementById('messageResponse');
 const messagesList = document.getElementById('messages-list');
 
+let loggedUserId;
+
+const msgTune = new Audio();
+msgTune.setAttribute('src', '/audio/message_tone.mp3');
+
 const chatId = location.pathname.substring(6);
 
 socket.on('connect', ()=>{
@@ -11,6 +16,7 @@ socket.on('connect', ()=>{
 socket.on('receive', (message)=>{
 
     messageResponse.hidden = true;
+    msgTune.play();
     let messageTime = new Date(message.messageTime);
     messageTime = messageTime.toLocaleTimeString();
 
@@ -27,7 +33,7 @@ document.getElementById('message-form').addEventListener('submit', (e)=>{
 
     const message = e.target[0].value;
     if(message){
-        socket.emit('send', {chatId, body: message});
+        socket.emit('send', {chatId, body: message, loggedUserId});
         e.target.reset();
     
         const date = new Date()
@@ -57,6 +63,7 @@ const getMessages = async () =>{
             messageResponse.textContent = result.error;
             messageResponse.hidden = false;
         } else if(result.messages){
+            loggedUserId = result.loggedUserId;
             messageResponse.hidden = true;
             result.messages.forEach(message => {
                 let messageTime = new Date(message.messageTime);

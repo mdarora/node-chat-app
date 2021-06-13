@@ -201,7 +201,7 @@ io.on('connection', socket =>{
 
         const newMessage = new Message({
             chatId: message.chatId,
-            from: {id: loggedUserId, name : loggedUserName},
+            from: {id: message.loggedUserId, name : loggedUserName},
             body: message.body
         });
         const savedMsg = await newMessage.save();
