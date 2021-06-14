@@ -1,6 +1,5 @@
 .conv-section{
-    padding: 0;
-    padding-bottom: 60px ;
+    padding: 60px 0;
     max-height: 100vh;
     min-height: 100vh;
     display: flex;
@@ -51,7 +50,8 @@
     justify-content: space-between;
     background-color: var(--dark-background);
     border-bottom:1px solid var(--dark-background-2);
-
+    position: fixed;
+    left: 0;right: 0;top: 0;
 }
 .conv-header-title{
     display: flex;
