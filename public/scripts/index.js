@@ -27,12 +27,11 @@ const getChats = async () =>{
             const allChats = result.message.map((element, index) =>{
 
                 const {member1, member2, lastMessage, updatedAt, _id} = element;
-                let updatedTime = new Date(updatedAt).toLocaleTimeString();
 
                 if(result.loggedUserId === member1.id){
-                    return {_id, lastMessage, updatedTime, name : member2.name}
+                    return {_id, lastMessage, updatedAt, name : member2.name}
                 } else {
-                    return {_id, lastMessage, updatedTime, name : member1.name}
+                    return {_id, lastMessage, updatedAt, name : member1.name}
                 }
             });
 
@@ -50,7 +49,7 @@ const getChats = async () =>{
                            <div class="chat-content  text-truncate" >
                                 <h5 class='chat-name text-truncate' >
                                         ${element.name}
-                                        <span  class='last-message-time'>${element.updatedTime}</span>
+                                        <span datetime='${element.updatedAt}' class='last-message-time'>${element.updatedAt}</span>
                                 </h5>
                                 <p class="chat-last-msg text-truncate" >
                                         ${element.lastMessage}
@@ -60,7 +59,7 @@ const getChats = async () =>{
                      </li>
                 `
             });
-            
+            timeago.render(document.querySelectorAll('.last-message-time'));
             
         }
 

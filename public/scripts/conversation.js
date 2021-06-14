@@ -16,15 +16,16 @@ socket.on('receive', (message)=>{
 
     messageResponse.hidden = true;
     msgTune.play();
-    let messageTime = new Date(message.messageTime);
-    messageTime = messageTime.toLocaleTimeString();
+    let date = new Date(message.messageTime);
+    const messageTime = timeago.format(date);
 
     messagesList.innerHTML += `<li class='other-user'>
         <p class='conv-message'>${message.body}<br/> 
-            <span class='message-time'>${messageTime}</span>
+            <span datetime='${message.messageTime}' class='message-time'>${messageTime}</span>
         </p>
     </li>`;
     document.querySelector('#messages-list > li:last-child').scrollIntoView();
+    timeago.render(document.querySelectorAll('.message-time'));
     
 });
 
@@ -37,14 +38,15 @@ document.getElementById('message-form').addEventListener('submit', (e)=>{
         e.target.reset();
     
         const date = new Date()
-        const messageTime = date.toLocaleTimeString();
+        const messageTime = timeago.format(date);
         messageResponse.hidden = true;
         messagesList.innerHTML += `<li class='log-user'>
             <p class='conv-message'>${message}<br/> 
-                <span class='message-time'>${messageTime}</span>
+                <span datetime='${date}' class='message-time'>${messageTime}</span>
             </p>
         </li>`;
         document.querySelector('#messages-list > li:last-child').scrollIntoView();
+        timeago.render(document.querySelectorAll('.message-time'));
     }
     
 });
@@ -67,19 +69,18 @@ const getMessages = async () =>{
             loggedUserId = result.loggedUserId;
             messageResponse.hidden = true;
             result.messages.forEach(message => {
-                let messageTime = new Date(message.messageTime);
-                messageTime = messageTime.toLocaleTimeString();
+                let messageTime = timeago.format(new Date(message.messageTime));
 
                 if(result.loggedUserId === message.from.id){
                     messagesList.innerHTML += `<li class='log-user'>
                         <p class='conv-message'>${message.body}<br/> 
-                            <span class='message-time'>${messageTime}</span>
+                            <span datetime='${message.messageTime}' class='message-time'>${messageTime}</span>
                         </p>
                     </li>`;
                 } else {
                     messagesList.innerHTML += `<li class='other-user'>
                         <p class='conv-message'>${message.body}<br/> 
-                            <span class='message-time'>${messageTime}</span>
+                            <span datetime='${message.messageTime}' class='message-time'>${messageTime}</span>
                         </p>
                     </li>`;
                 }
@@ -92,6 +93,10 @@ const getMessages = async () =>{
         console.log(error);
         
     }
+    timeago.render(document.querySelectorAll('.message-time'));
 };
+
+
+
 
 window.addEventListener('load', getMessages);
