@@ -4,8 +4,7 @@ const messagesList = document.getElementById('messages-list');
 
 let loggedUserId;
 
-const msgTune = new Audio();
-msgTune.setAttribute('src', '/audio/message_tone.mp3');
+const msgTune = document.getElementById('msg-tune');
 
 const chatId = location.pathname.substring(6);
 
