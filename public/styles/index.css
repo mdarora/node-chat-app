@@ -219,6 +219,7 @@ main{
     font-size: 2rem;
     color: #fff;
     text-shadow: none;
+    outline: none !important;
 }
 .modal-body .new-users-list{
     margin: 0;
