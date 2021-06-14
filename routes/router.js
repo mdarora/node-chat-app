@@ -186,7 +186,6 @@ router.post('/chat/:id', loginAuth, async (req, res)=>{
 /////////////////////////////////////////////////////////////
 
 io.on('connection', socket =>{
-    console.log('a new connection', socket.id);
     
     
     socket.on('join', (roomId) =>{
@@ -219,7 +218,6 @@ io.on('connection', socket =>{
     });
 
     socket.on('disconnect', () =>{
-        console.log('client disconnected', socket.id);
         removeUser(socket.id);
     });
 });
