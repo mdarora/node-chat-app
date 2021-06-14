@@ -176,12 +176,15 @@ main{
     background-color: var(--dark-background-2);
 
 }
-.chats-search form, .modal-body .new-chat-search form{
+.modal-body .new-chat-search form{
     display: flex;
-    align-items: center;
-    
+    align-items: center; 
 }
-.chats-search form input, .chats-search form button, .modal-body .new-chat-search form input, .modal-body .new-chat-search form button{
+
+.chats-search input{
+    width: 100%;
+}
+.chats-search input, .modal-body .new-chat-search form input, .modal-body .new-chat-search form button{
     color: #fff;
     flex-grow: 1;
     border: none;
@@ -190,7 +193,7 @@ main{
     font-size: 1.2rem;
     background: transparent;
 }
-.chats-search form button, .modal-body .new-chat-search form button{
+.modal-body .new-chat-search form button{
     flex-grow: 0;
     padding: .8rem 1.5rem;
 }

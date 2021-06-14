@@ -23,7 +23,6 @@ const getChats = async () =>{
         else if (result.message) {
             spinner.hidden = true;
             resArea.hidden = true;
-            console.log(result.message);
             
             const allChats = result.message.map((element, index) =>{
 
@@ -139,7 +138,28 @@ document.getElementById('searchUserForm').addEventListener('submit', async (e) =
     }
 });
     
+
+document.getElementById('chat-search').addEventListener('input', (e)=>{
+    const queryChat = e.target.value;
+
+    // Declare variables
+    let filter, ul, li, name, i, txtValue;
+    filter = queryChat.toUpperCase();
+    ul = document.getElementById("chat-list");
+    li = ul.getElementsByTagName('li');
+
+    // Loop through all list items, and hide those who don't match the search query
+    for (i = 0; i < li.length; i++) {
+        name = li[i].getElementsByTagName("h5")[0];
+        txtValue = name.textContent || name.innerText;
+        if (txtValue.toUpperCase().indexOf(filter) > -1) {
+        li[i].hidden = false;
+        } else {
+        li[i].hidden = true;
+        }
+    }
     
+});
 
 
 
