@@ -139,8 +139,6 @@ router.get('/addChat/:id', loginAuth, async (req,res)=>{
 
 });
 
-let loggedUserId;
-let loggedUserName;
 router.get('/chat/:id', loginAuth, async (req, res) =>{
     loggedUserId = req.id;
     loggedUserName = req.name;
@@ -171,7 +169,7 @@ router.post('/chat/:id', loginAuth, async (req, res)=>{
     try {
         const messages = await Message.find({chatId});
         if(!messages || messages.length === 0){
-            return res.status(404).json({error: 'No messages yet.'});
+            return res.status(404).json({error: 'No messages yet.', loggedUserId});
         }
         
         return res.status(200).json({messages, loggedUserId});
@@ -199,19 +197,23 @@ io.on('connection', socket =>{
     socket.on('send', async (message)=>{
         const user = getUser(socket.id);
 
-        const newMessage = new Message({
-            chatId: message.chatId,
-            from: {id: message.loggedUserId, name : loggedUserName},
-            body: message.body
-        });
-        const savedMsg = await newMessage.save();
-        
-        const chatUpdate = await Chat.updateOne({_id: savedMsg.chatId},{$set: {lastMessage: savedMsg.body}});
-        
-        const roomusers = getUsersInRoom(user.room);
-        if(roomusers.length === 2){
-            const otherUser = roomusers[0].id !==  user.id ? roomusers[0].id : roomusers[1].id;
-            socket.to(otherUser).emit('receive', savedMsg);
+        try {
+            const newMessage = new Message({
+                chatId: message.chatId,
+                from: {id: message.loggedUserId},
+                body: message.body
+            });
+            const savedMsg = await newMessage.save();
+            
+            const chatUpdate = await Chat.updateOne({_id: savedMsg.chatId},{$set: {lastMessage: savedMsg.body}});
+            
+            const roomusers = getUsersInRoom(user.room);
+            if(roomusers.length === 2){
+                const otherUser = roomusers[0].id !==  user.id ? roomusers[0].id : roomusers[1].id;
+                socket.to(otherUser).emit('receive', savedMsg);
+            }
+        } catch (error) {
+            console.log(error.name, error.message)
         }
         
     });
