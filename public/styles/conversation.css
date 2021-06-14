@@ -1,5 +1,6 @@
 .conv-section{
     padding: 0;
+    padding-bottom: 60px ;
     max-height: 100vh;
     min-height: 100vh;
     display: flex;
@@ -173,7 +174,8 @@
     margin-top: 1rem;
     border-top: 1px solid var(--dark-background-2);
     background-color: var(--dark-background);
-
+    position: fixed;
+    left: 0; right: 0; bottom: 0;
 }
 .conv-footer form{
     padding: 1rem 1.5rem;
