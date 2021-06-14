@@ -63,6 +63,7 @@ const getMessages = async () =>{
         if(result.error){
             messageResponse.textContent = result.error;
             messageResponse.hidden = false;
+            loggedUserId = result.loggedUserId;
         } else if(result.messages){
             loggedUserId = result.loggedUserId;
             messageResponse.hidden = true;
@@ -87,8 +88,6 @@ const getMessages = async () =>{
 
             document.querySelector('#messages-list > li:last-child').scrollIntoView();
         }
-
-        
         
     } catch (error) {
         console.log(error);
