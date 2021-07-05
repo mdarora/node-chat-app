@@ -121,7 +121,7 @@
                     </div>
                     <div class="conv-content">
                         <h5 class='conv-with'><%= chatName %></h5>
-                        <p class="conv-status">Offline</p>
+                        <p id="active-status" class="conv-status">Offline</p>
                     </div>
                 </div>
                 <div class="conv-header-btns">
@@ -153,6 +153,10 @@
 </main>
 
 <audio id="msg-tune" src="/audio/notification_tones.mp3" hidden></audio>
+
+<script>
+    const loggedUserId = "<%= loggedUserId %>"
+</script>
 
 <script src="/socket.io/socket.io.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/timeago.js/4.0.2/timeago.min.js" integrity="sha512-SVDh1zH5N9ChofSlNAK43lcNS7lWze6DTVx1JCXH1Tmno+0/1jMpdbR8YDgDUfcUrPp1xyE53G42GFrcM0CMVg==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
