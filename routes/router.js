@@ -9,7 +9,7 @@ const User = require('../db/models/userSchema');
 const Chat = require('../db/models/chatSchema');
 const Message = require('../db/models/messageSchema');
 
-const { addUser, removeUser, getUser, getUsersInRoom } = require('../middleware/users');
+const { addUser, removeUser, getUser, getUsersInRoom, getUsersBydbID} = require('../middleware/users');
 
 
 const io = global.socketio;
@@ -18,7 +18,7 @@ let indexResponse = '';
     
 ///////////////////////////-Routes-/////////////////////////////////////
 router.get('/', loginAuth, (req, res) =>{
-    return res.render('index', {indexResponse: indexResponse, chatName : '', user: req.name});
+    return res.render('index', {indexResponse: indexResponse, chatName : '', user: req.name, loggedUserId: req.id});
 });
 
 
@@ -37,15 +37,15 @@ router.get("/getChats", loginAuth, async  (req, res)=>{
         ]}).sort({updatedAt: -1});
             
         if(!getChats){
-            return res.status(404).json({error: 'No chats found'});
+            return res.status(404).json({error: 'No chats found', loggedUserId});
         } else if(getChats.length === 0){
-            return res.status(404).json({error: 'No chats found'});
+            return res.status(404).json({error: 'No chats found', loggedUserId});
         }
         res.status(200).json({message : getChats, loggedUserId, loggedUserName});
 
     } catch (error) {
         console.log(error.name, error.message);
-        return res.status(500).json({error: 'Something went wrong!'});
+        return res.status(500).json({error: 'Something went wrong!', loggedUserId});
     }
 
 });
@@ -155,12 +155,12 @@ router.get('/chat/:id', loginAuth, async (req, res) =>{
             chatName = FindChatById.member1.name;
         }
         
-        return res.render('index', {indexResponse: indexResponse, chatName, user: req.name});
+        return res.render('index', {indexResponse: indexResponse, chatName, user: req.name, loggedUserId});
         // return res.render('conversation', {chatName});
 
     } catch (error) {
         console.log(error);
-        return res.render('index', {indexResponse: indexResponse, chatName, user: req.name});
+        return res.render('index', {indexResponse: indexResponse, chatName, user: req.name, loggedUserId});
         // return res.render('conversation', {chatName});
     }
 });
@@ -179,7 +179,7 @@ router.post('/chat/:id', loginAuth, async (req, res)=>{
 
     } catch (error) {
         console.log(error);
-        return res.status(200).json({messages, loggedUserId});
+        return res.status(200).json({loggedUserId});
     }
     
 
@@ -190,9 +190,10 @@ router.post('/chat/:id', loginAuth, async (req, res)=>{
 
 io.on('connection', socket =>{
 
-    socket.on('join', (roomId) =>{
-        const user = addUser(socket.id, roomId);
+    socket.on('join', (roomId, loggedUserId) =>{
+        const user = addUser(socket.id, roomId, loggedUserId);
         socket.join(user.room);
+        socket.to(user.room).emit('userActive', {value: true});
     });
 
     socket.on('send', async (message)=>{
@@ -205,14 +206,21 @@ io.on('connection', socket =>{
                 body: message.body
             });
             const savedMsg = await newMessage.save();
-            
             const chatUpdate = await Chat.updateOne({_id: savedMsg.chatId},{$set: {lastMessage: savedMsg.body}});
             
-            const roomusers = getUsersInRoom(user.room);
-            if(roomusers.length === 2){
-                const otherUser = roomusers[0].id !==  user.id ? roomusers[0].id : roomusers[1].id;
-                socket.to(otherUser).emit('receive', savedMsg);
+            const findChat = await Chat.findOne({_id: message.chatId});
+            const receiverId = findChat.member1.id === message.loggedUserId ? findChat.member2.id : findChat.member1.id;
+            
+            const otherUser = getUsersBydbID(receiverId)[0];
+            if (otherUser) {
+                socket.to(otherUser.id).emit('receive', savedMsg);
             }
+
+            // const roomusers = getUsersInRoom(user.room);
+            // if(roomusers.length === 2){
+            //     const otherUser = roomusers[0].id !==  user.id ? roomusers[0].id : roomusers[1].id;
+            //     socket.to(otherUser).emit('receive', savedMsg);
+            // }
         } catch (error) {
             console.log(error.name, error.message)
         }
@@ -220,6 +228,8 @@ io.on('connection', socket =>{
     });
 
     socket.on('disconnect', () =>{
+        const user = getUser(socket.id);
+        socket.to(user.room).emit('userActive', {value: true});
         removeUser(socket.id);
     });
 });
