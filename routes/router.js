@@ -18,8 +18,9 @@ let indexResponse = '';
     
 ///////////////////////////-Routes-/////////////////////////////////////
 router.get('/', loginAuth, (req, res) =>{
-    res.render('index', {indexResponse: indexResponse});
+    return res.render('index', {indexResponse: indexResponse, chatName : '', user: req.name});
 });
+
 
 router.get("/getChats", loginAuth, async  (req, res)=>{
     
@@ -154,11 +155,13 @@ router.get('/chat/:id', loginAuth, async (req, res) =>{
             chatName = FindChatById.member1.name;
         }
         
-        return res.render('conversation', {chatName});
+        return res.render('index', {indexResponse: indexResponse, chatName, user: req.name});
+        // return res.render('conversation', {chatName});
 
     } catch (error) {
         console.log(error);
-        return res.render('conversation', {chatName});
+        return res.render('index', {indexResponse: indexResponse, chatName, user: req.name});
+        // return res.render('conversation', {chatName});
     }
 });
 
@@ -186,8 +189,7 @@ router.post('/chat/:id', loginAuth, async (req, res)=>{
 /////////////////////////////////////////////////////////////
 
 io.on('connection', socket =>{
-    
-    
+
     socket.on('join', (roomId) =>{
         const user = addUser(socket.id, roomId);
         socket.join(user.room);
