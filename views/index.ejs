@@ -1,7 +1,8 @@
 <%- include('layout/header', {title: 'Chat App', cssFile: '/styles/index.css'}) -%>
 
 <main>
-    <nav id='navigation' class='navigation'>
+
+    <!-- <nav id='navigation' class='navigation'>
         <div class="nav-brand">
             <a href='/' title='Chat App'>
                 <svg viewBox="0 0 512 511">
@@ -17,7 +18,7 @@
                 </a>
             </div>
         </div>
-    </nav>
+    </nav> -->
 
     <section id='chats' class='chats-section px-0'>
         <div class="chats-header">
@@ -25,8 +26,12 @@
                 <h2>Chats</h2>
                 <div class="menu">
                     <span title='Start new Chat' data-toggle="modal" data-target="#searchUsers" > <i class="fas fa-user-plus"></i> </span>
-                    <span>
+                    <span id="more" class="more">
                         <i class="fas fa-ellipsis-v"></i>
+                        <ul id="more-list" hidden>
+                            <li data-toggle="modal" data-target="#searchUsers"><a>Start new chat</a></li>
+                            <li><a href="/logout">Logout</a></li>
+                        </ul>
                     </span>
                 </div>
             </div>
@@ -88,7 +93,73 @@
 
     </section>
 
+    <% if (chatName === '') { %>
+        <section id="no-conv" class="no-conv-section">
+            <div class="welcome-msg">
+                <div class="conv-avtaar">
+                    <i class="fas fa-user-circle"></i>
+                </div>
+                <h2>Welcome, <%= user %></h2>
+                <h5>Please select a chat to start messaging.</h5>
+                <h3>OR</h3>
+                <p>Click on "<i class="fas fa-user-plus"></i>" icon above to start new chat</p>
+            </div>
+        </section>
+    <% } else { %>
+
+        <section id='conversation' class='conv-section'>
+
+            <div class="conv-header conv-childs">
+                <div class="conv-header-title">
+                    <div class="backLink" hidden>
+                        <a href='/'>
+                            <i class="fas fa-arrow-left"></i>
+                        </a>
+                    </div>
+                    <div class="conv-avtaar">
+                        <i class="fas fa-user-circle"></i>
+                    </div>
+                    <div class="conv-content">
+                        <h5 class='conv-with'><%= chatName %></h5>
+                        <p class="conv-status">Offline</p>
+                    </div>
+                </div>
+                <div class="conv-header-btns">
+                    <ul>
+                        <li class="conv-header-btn">
+                            <i class="fas fa-ellipsis-v"></i>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class='conv-messages conv-childs'>
+                <ul id="messages-list" class='messages-list'>
+                    <h4 id="messageResponse" class="text-center text-danger py-3" hidden></h4>
+
+                </ul>
+            </div>
+
+            <div class="conv-footer conv-childs">
+                <form id='message-form'>
+                    <input class='message-input' type="text" name="message" id="message" placeholder='Write your message...' autocomplete="off" required/>
+                    <button type="submit"> <i class="fas fa-paper-plane"></i> </button>
+                </form>
+            </div>
+
+        </section>
+    <% } %>
+
 </main>
 
+<audio id="msg-tune" src="/audio/notification_tones.mp3" hidden></audio>
+
+<script src="/socket.io/socket.io.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/timeago.js/4.0.2/timeago.min.js" integrity="sha512-SVDh1zH5N9ChofSlNAK43lcNS7lWze6DTVx1JCXH1Tmno+0/1jMpdbR8YDgDUfcUrPp1xyE53G42GFrcM0CMVg==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 <%- include('layout/footer', {jsFile: '/scripts/index.js'}) -%>
+
+<% if (chatName !== '') { %>
+    <script>
+        getMessages();
+    </script>
+<% } %>

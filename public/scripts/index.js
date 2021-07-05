@@ -40,7 +40,7 @@ const getChats = async () =>{
             allChats.forEach(element => {
                 chatList.innerHTML += `
                     <li class="chats-list-item" >
-                         <a href="/chat/${element._id}" >
+                         <a id="${element._id}" href="/chat/${element._id}" >
                            <div class="Chat-avtaar" >
                                  <figure>
                                      <i class="fas fa-user-circle"></i>
@@ -70,6 +70,8 @@ const getChats = async () =>{
         resText.textContent = 'Something went wrong!';
     }
 }
+
+window.addEventListener('load', getChats);
 
 document.getElementById('searchUserForm').addEventListener('submit', async (e) =>{
     e.preventDefault();
@@ -160,6 +162,132 @@ document.getElementById('chat-search').addEventListener('input', (e)=>{
     
 });
 
+document.getElementById("more").addEventListener('click', ()=>{
+    document.getElementById("more-list").hidden = !document.getElementById("more-list").hidden;
+});
 
 
-window.addEventListener('load', getChats);
+
+// **************************************************************************************************
+
+const socket = io();
+const messageResponse = document.getElementById('messageResponse');
+const messagesList = document.getElementById('messages-list');
+
+let loggedUserId;
+
+const msgTune = document.getElementById('msg-tune');
+
+const chatId = location.pathname.substring(6);
+
+socket.on('connect', ()=>{
+    socket.emit('join', chatId);
+});
+
+socket.on('receive', (message)=>{
+    messageResponse.hidden = true;
+    msgTune.play();
+    let date = new Date(message.messageTime);
+    const messageTime = timeago.format(date);
+
+    messagesList.innerHTML += `<li class='other-user'>
+        <p class='conv-message'>${message.body}<br/> 
+            <span datetime='${message.messageTime}' class='message-time'>${messageTime}</span>
+        </p>
+    </li>`;
+
+    updateChatList(chatId, message.body, message.messageTime);
+
+    document.querySelector('#messages-list > li:last-child').scrollIntoView();
+    timeago.render(document.querySelectorAll('.message-time'));
+    
+});
+
+if (document.getElementById('message-form')) {
+
+    document.getElementById('message-form').addEventListener('submit', (e)=>{
+        e.preventDefault();
+    
+        const message = e.target[0].value;
+        if(message){
+            socket.emit('send', {chatId, body: message, loggedUserId});
+            e.target.reset();
+        
+            const date = new Date()
+            const messageTime = timeago.format(date);
+            messageResponse.hidden = true;
+            messagesList.innerHTML += `<li class='log-user'>
+                <p class='conv-message'>${message}<br/> 
+                    <span datetime='${date}' class='message-time'>${messageTime}</span>
+                </p>
+            </li>`;
+
+            
+            updateChatList(chatId, message, date);
+
+            document.querySelector('#messages-list > li:last-child').scrollIntoView();
+            timeago.render(document.querySelectorAll('.message-time'));
+        }
+        
+    });
+}
+
+
+const getMessages = async () =>{
+
+    try {
+        const res = await fetch(location.pathname, {
+            method: 'POST',
+            credentials: 'include'
+        });
+        const result = await res.json();
+
+        if(result.error){
+            messageResponse.textContent = result.error;
+            messageResponse.hidden = false;
+            loggedUserId = result.loggedUserId;
+        } else if(result.messages){
+            loggedUserId = result.loggedUserId;
+            messageResponse.hidden = true;
+            result.messages.forEach(message => {
+                let messageTime = timeago.format(new Date(message.messageTime));
+
+                if(result.loggedUserId === message.from.id){
+                    messagesList.innerHTML += `<li class='log-user'>
+                        <p class='conv-message'>${message.body}<br/> 
+                            <span datetime='${message.messageTime}' class='message-time'>${messageTime}</span>
+                        </p>
+                    </li>`;
+                } else {
+                    messagesList.innerHTML += `<li class='other-user'>
+                        <p class='conv-message'>${message.body}<br/> 
+                            <span datetime='${message.messageTime}' class='message-time'>${messageTime}</span>
+                        </p>
+                    </li>`;
+                }
+            });
+
+            document.querySelector('#messages-list > li:last-child').scrollIntoView();
+        }
+        
+    } catch (error) {
+        console.log(error);
+        
+    }
+    timeago.render(document.querySelectorAll('.message-time'));
+};
+
+
+const updateChatList = (id, lastMessage, date) => {
+    const currentChat = document.getElementById(id);
+    const chatList = document.getElementById('chat-list');
+
+    currentChat.querySelector("p").textContent = lastMessage;
+    currentChat.querySelector("span").setAttribute("datetime", date);
+    timeago.render(document.querySelectorAll('.last-message-time'));
+
+    const liEl = currentChat.parentElement;
+    currentChat.parentElement.remove();
+    chatList.insertBefore(liEl, chatList.childNodes[0]);
+}
+
