@@ -174,29 +174,42 @@ const socket = io();
 const messageResponse = document.getElementById('messageResponse');
 const messagesList = document.getElementById('messages-list');
 
-let loggedUserId;
 
 const msgTune = document.getElementById('msg-tune');
 
 const chatId = location.pathname.substring(6);
 
 socket.on('connect', ()=>{
-    socket.emit('join', chatId);
+    socket.emit('join', chatId, loggedUserId);
 });
+
+// socket.on('userActive', ({value}) =>{
+//     console.log(value);
+//     if (value === true){
+//         document.getElementById("active-status").textContent = 'Online';
+//     } else {
+//         document.getElementById("active-status").textContent = 'Offline';
+//     }
+// });
 
 socket.on('receive', (message)=>{
     messageResponse.hidden = true;
     msgTune.play();
+
     let date = new Date(message.messageTime);
     const messageTime = timeago.format(date);
 
-    messagesList.innerHTML += `<li class='other-user'>
-        <p class='conv-message'>${message.body}<br/> 
-            <span datetime='${message.messageTime}' class='message-time'>${messageTime}</span>
-        </p>
-    </li>`;
+    if (message.chatId === chatId) {
+        messagesList.innerHTML += `<li class='other-user'>
+            <p class='conv-message'>${message.body}<br/> 
+                <span datetime='${message.messageTime}' class='message-time'>${messageTime}</span>
+            </p>
+        </li>`;
+        updateChatList(chatId, message.body, message.messageTime);
+    } else {
+        updateChatList(message.chatId, message.body, message.messageTime);
+    }
 
-    updateChatList(chatId, message.body, message.messageTime);
 
     document.querySelector('#messages-list > li:last-child').scrollIntoView();
     timeago.render(document.querySelectorAll('.message-time'));
@@ -247,7 +260,7 @@ const getMessages = async () =>{
             messageResponse.hidden = false;
             loggedUserId = result.loggedUserId;
         } else if(result.messages){
-            loggedUserId = result.loggedUserId;
+            // loggedUserId = result.loggedUserId;
             messageResponse.hidden = true;
             result.messages.forEach(message => {
                 let messageTime = timeago.format(new Date(message.messageTime));
