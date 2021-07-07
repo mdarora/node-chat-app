@@ -67,7 +67,8 @@ main{
     flex-direction: column;
     flex-grow: 1;
     background-color: var(--dark-background-2);
-    width: 40%;
+    width: 100%;
+    max-width: 575px;
 }
 
 .chats-header{
@@ -277,7 +278,7 @@ main{
     overflow-x: hidden;
     overflow-y: auto;
     background-color: var(--dark-background);
-    width: 60%;
+    /* width: 60%; */
 }
 .welcome-msg{
     color: #ffffff;
@@ -311,7 +312,8 @@ main{
     overflow-x: hidden;
     overflow-y: auto;
     background-color: var(--dark-background);
-    width: 60%;
+    flex-grow: 1;
+    min-width: 575px;
 }
  /* ******************************* */
 .start-conv{
