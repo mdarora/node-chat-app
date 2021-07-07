@@ -40,7 +40,7 @@ const getChats = async () =>{
             allChats.forEach(element => {
                 chatList.innerHTML += `
                     <li class="chats-list-item" >
-                         <a id="${element._id}" href="/chat/${element._id}" >
+                         <a id="${element._id}" data-count="0" href="/chat/${element._id}" >
                             <strong hidden> </strong>
                            <div class="Chat-avtaar" >
                                  <figure>
@@ -61,7 +61,6 @@ const getChats = async () =>{
                 `
             });
 
-            console.log(result.unreadChats);
             if(result.unreadChats.length !== 0){
                 result.unreadChats.forEach((el)=>{
                     updateUnreadChat(el.id, el.count);
@@ -216,15 +215,19 @@ socket.on('receive', (message)=>{
                 <span datetime='${message.messageTime}' class='message-time'>${messageTime}</span>
             </p>
         </li>`;
+
+        socket.emit('read', {message});
+        
         updateChatList(chatId, message.body, message.messageTime);
+        document.querySelector('#messages-list > li:last-child').scrollIntoView();
     } else {
         updateChatList(message.chatId, message.body, message.messageTime);
         updateUnreadChat(message.chatId);
     }
 
-    if(document.querySelector('#messages-list > li:last-child')){
-        document.querySelector('#messages-list > li:last-child').scrollIntoView();
-    }
+    // if(document.querySelector('#messages-list > li:last-child')){
+    //     document.querySelector('#messages-list > li:last-child').scrollIntoView();
+    // }
     timeago.render(document.querySelectorAll('.message-time'));
     
 });
@@ -320,5 +323,10 @@ const updateChatList = (id, lastMessage, date) => {
 const updateUnreadChat = (id, count) => {
     const unreadChat = document.getElementById(id);
     unreadChat.querySelector("strong").hidden = false;
-    unreadChat.querySelector("strong").innerHTML = count ? count : "";
+    if (count) {
+        unreadChat.dataset.count = count;
+    } else if (id !== chatId) {
+        unreadChat.dataset.count = parseInt(unreadChat.dataset.count) + 1;
+    }
+    unreadChat.querySelector("strong").innerHTML = unreadChat.dataset.count;
 }
