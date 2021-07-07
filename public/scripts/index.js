@@ -41,6 +41,7 @@ const getChats = async () =>{
                 chatList.innerHTML += `
                     <li class="chats-list-item" >
                          <a id="${element._id}" href="/chat/${element._id}" >
+                            <strong hidden> </strong>
                            <div class="Chat-avtaar" >
                                  <figure>
                                      <i class="fas fa-user-circle"></i>
@@ -59,6 +60,14 @@ const getChats = async () =>{
                      </li>
                 `
             });
+
+            console.log(result.unreadChats);
+            if(result.unreadChats.length !== 0){
+                result.unreadChats.forEach((el)=>{
+                    updateUnreadChat(el.id, el.count);
+                });
+            }
+
             timeago.render(document.querySelectorAll('.last-message-time'));
             
         }
@@ -193,7 +202,9 @@ socket.on('connect', ()=>{
 // });
 
 socket.on('receive', (message)=>{
-    messageResponse.hidden = true;
+    if(messageResponse) {
+        messageResponse.hidden = true;
+    }
     msgTune.play();
 
     let date = new Date(message.messageTime);
@@ -208,10 +219,12 @@ socket.on('receive', (message)=>{
         updateChatList(chatId, message.body, message.messageTime);
     } else {
         updateChatList(message.chatId, message.body, message.messageTime);
+        updateUnreadChat(message.chatId);
     }
 
-
-    document.querySelector('#messages-list > li:last-child').scrollIntoView();
+    if(document.querySelector('#messages-list > li:last-child')){
+        document.querySelector('#messages-list > li:last-child').scrollIntoView();
+    }
     timeago.render(document.querySelectorAll('.message-time'));
     
 });
@@ -304,3 +317,8 @@ const updateChatList = (id, lastMessage, date) => {
     chatList.insertBefore(liEl, chatList.childNodes[0]);
 }
 
+const updateUnreadChat = (id, count) => {
+    const unreadChat = document.getElementById(id);
+    unreadChat.querySelector("strong").hidden = false;
+    unreadChat.querySelector("strong").innerHTML = count ? count : "";
+}

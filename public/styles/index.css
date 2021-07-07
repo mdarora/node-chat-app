@@ -167,7 +167,20 @@ main{
     text-decoration: none;
     padding: 1.5rem;
     transition: all .3s;
-
+    position: relative;
+}
+.chats-list-item a strong{
+    content: "25";
+    width: 20px;
+    height: 20px;
+    color: #fff;
+    background-color: var(--theme-color);
+    position: absolute;
+    right: 10px;
+    bottom: 10px;
+    text-align: center;
+    line-height: 22px;
+    border-radius: 50%;
 }
 .chats-list-item a:hover{
     background-color: var(--dark-background-3);
@@ -198,7 +211,7 @@ main{
 .chat-content .chat-last-msg{
     font-size: 1.2rem;
     color: #727272;
-    width: 100%;
+    width: 95%;
     margin-top: .5rem;
     margin-bottom: 0;
 }
@@ -278,7 +291,7 @@ main{
     overflow-x: hidden;
     overflow-y: auto;
     background-color: var(--dark-background);
-    /* width: 60%; */
+    flex-grow: 1;
 }
 .welcome-msg{
     color: #ffffff;
