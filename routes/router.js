@@ -277,6 +277,10 @@ io.on('connection', socket =>{
         
     });
 
+    socket.on('read', async ({message}) =>{
+        await Message.updateOne({_id:message._id}, {$set: {read: true}});
+    });
+
     socket.on('disconnect', () =>{
         const user = getUser(socket.id);
         socket.to(user.room).emit('userActive', {value: true});
