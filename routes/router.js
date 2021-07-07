@@ -41,7 +41,56 @@ router.get("/getChats", loginAuth, async  (req, res)=>{
         } else if(getChats.length === 0){
             return res.status(404).json({error: 'No chats found', loggedUserId});
         }
-        res.status(200).json({message : getChats, loggedUserId, loggedUserName});
+
+        let unreadChats = [];
+
+        Promise.all(
+            getChats.map(element => {
+
+                return Message.find({
+                    chatId : element._id,
+                    read: false,
+                    "from.id": {$nin: [loggedUserId]}
+                })
+            })
+        ).then((data) => {
+            data.forEach((a) =>{
+
+                if (a.length !== 0){
+                    unreadChats.push({
+                        id:a[0].chatId,
+                        count: a.length
+                    });
+                }
+            });
+        }).then(() =>{
+            return res.status(200).json({message : getChats, loggedUserId, loggedUserName, unreadChats});
+        }).catch ((error) => {
+            console.log(error.name, error.message);
+            return res.status(500).json({error: 'Something went wrong!', loggedUserId});
+        });
+        
+        // getChats.forEach(element => {
+
+        //     Message.find({
+        //         chatId : element._id,
+        //         read: false,
+        //         "from.id": {$nin: [loggedUserId]}
+        //     }).then((data) => {
+        //         if (data.length !== 0){
+        //             console.log(data);
+        //             unreadChats.push({
+        //                 id:element._id,
+        //                 count: data.length
+        //             });
+        //         }
+        //     // console.log(unreadChats);
+        //     });
+
+
+        // });
+
+        
 
     } catch (error) {
         console.log(error.name, error.message);
@@ -154,14 +203,15 @@ router.get('/chat/:id', loginAuth, async (req, res) =>{
         } else{
             chatName = FindChatById.member1.name;
         }
-        
+        await Message.updateMany({
+            chatId:chatId,
+            "from.id": {$nin: [loggedUserId]}
+        }, {$set: {read: true}});
         return res.render('index', {indexResponse: indexResponse, chatName, user: req.name, loggedUserId});
-        // return res.render('conversation', {chatName});
 
     } catch (error) {
         console.log(error);
         return res.render('index', {indexResponse: indexResponse, chatName, user: req.name, loggedUserId});
-        // return res.render('conversation', {chatName});
     }
 });
 
