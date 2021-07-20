@@ -62,13 +62,11 @@ main{
 .chats-section{
     max-height: 100vh;
     min-height: 100vh;
-    max-width: 100%;
     display: flex;
     flex-direction: column;
     flex-grow: 1;
     background-color: var(--dark-background-2);
-    width: 100%;
-    max-width: 575px;
+    width: 40%;
 }
 
 .chats-header{
@@ -292,6 +290,7 @@ main{
     overflow-y: auto;
     background-color: var(--dark-background);
     flex-grow: 1;
+    width: 60%;
 }
 .welcome-msg{
     color: #ffffff;
@@ -301,11 +300,11 @@ main{
     align-items: center;
     flex-direction: column;
 }
-.welcome-msg h5{
+/* .welcome-msg h5{
     font-size: 1.4rem;
     font-weight: normal;
-}
-.welcome-msg p{
+} */
+.welcome-msg p, .welcome-msg h5{
     color: #727272;
     font-size: 1.4rem;
 }
@@ -316,7 +315,6 @@ main{
 }
 
 .conv-section{
-    /* padding: 60px 0; */
     max-height: 100vh;
     min-height: 100vh;
     display: flex;
@@ -326,7 +324,7 @@ main{
     overflow-y: auto;
     background-color: var(--dark-background);
     flex-grow: 1;
-    min-width: 575px;
+    width: 60%;
 }
  /* ******************************* */
 .start-conv{
@@ -380,6 +378,7 @@ main{
 
 }
 .conv-header-title .backLink{
+    display: none;
     margin-right: 2rem;
 }
 .conv-header-title .backLink i{

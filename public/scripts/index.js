@@ -1,3 +1,13 @@
+const msgTune = document.getElementById('msg-tune');
+const chats = document.getElementById("chats");
+const backlink = document.getElementById("backlink");
+const chatId = location.pathname.substring(6);
+
+if(chatId){
+    chats.classList.add("hide-sm");
+    backlink.classList.add("show-sm");
+}
+
 const getChats = async () =>{
     const resText = document.getElementById('res-text');
     const resArea = document.getElementById('res-area');
@@ -182,10 +192,6 @@ const socket = io();
 const messageResponse = document.getElementById('messageResponse');
 const messagesList = document.getElementById('messages-list');
 
-
-const msgTune = document.getElementById('msg-tune');
-
-const chatId = location.pathname.substring(6);
 
 socket.on('connect', ()=>{
     socket.emit('join', chatId, loggedUserId);
