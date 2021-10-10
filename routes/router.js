@@ -69,26 +69,6 @@ router.get("/getChats", loginAuth, async  (req, res)=>{
             console.log(error.name, error.message);
             return res.status(500).json({error: 'Something went wrong!', loggedUserId});
         });
-        
-        // getChats.forEach(element => {
-
-        //     Message.find({
-        //         chatId : element._id,
-        //         read: false,
-        //         "from.id": {$nin: [loggedUserId]}
-        //     }).then((data) => {
-        //         if (data.length !== 0){
-        //             console.log(data);
-        //             unreadChats.push({
-        //                 id:element._id,
-        //                 count: data.length
-        //             });
-        //         }
-        //     // console.log(unreadChats);
-        //     });
-
-
-        // });
 
         
 

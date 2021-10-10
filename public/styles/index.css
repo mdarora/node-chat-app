@@ -88,10 +88,10 @@ main{
     margin-left: 1.4rem;
     cursor: pointer;
 }
-.chats-header .menu span.more{
+.chats-header .menu span.more, #conv-more{
     position: relative;
 }
-.chats-header .menu span.more ul{
+.chats-header .menu span.more ul, ul#conv-more-list{
     list-style: none;
     color: #ffffff;
     padding: 1rem 0;
@@ -102,19 +102,19 @@ main{
     border-radius: .5rem;
     background-color: var(--dark-background-2);
 }
-.chats-header .menu span.more ul li{
+.chats-header .menu span.more ul li, ul#conv-more-list li{
     font-size: 1.4rem;
     white-space: nowrap;
 }
-.chats-header .menu span.more ul li:hover{
+.chats-header .menu span.more ul li:hover, ul#conv-more-list li:hover{
     background-color: var(--dark-background-3) ;
 }
-.chats-header .menu span.more ul li a{
+.chats-header .menu span.more ul li a, ul#conv-more-list li a{
     display: block;
     color: #ffffff;
     padding: .5rem 1.5rem;
 }
-.chats-header .menu span.more ul li a:hover{
+.chats-header .menu span.more ul li a:hover, ul#conv-more-list li a:hover{
     text-decoration: none;
 }
 .chats-header .menu span i{
@@ -414,7 +414,6 @@ main{
 
 }
 .conv-header-btns ul li{
-    margin-left: 1rem;
     margin-bottom: 0;
 
 }
