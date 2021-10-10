@@ -18,7 +18,7 @@ let indexResponse = '';
     
 ///////////////////////////-Routes-/////////////////////////////////////
 router.get('/', loginAuth, (req, res) =>{
-    return res.render('index', {indexResponse: indexResponse, chatName : '', user: req.name, loggedUserId: req.id});
+    return res.render('index', {indexResponse: indexResponse, chatName : '', user: req.name, loggedUserId: req.id, chatUserMail : ''});
 });
 
 
@@ -194,24 +194,29 @@ router.get('/chat/:id', loginAuth, async (req, res) =>{
     loggedUserName = req.name;
     const chatId = req.params.id;
     let chatName;
+    let chatUserId;
 
     
     try {
         const FindChatById = await Chat.findOne({_id: chatId});
         if (FindChatById.member1.id === loggedUserId){
             chatName = FindChatById.member2.name;
+            chatUserId =  FindChatById.member2.id;
         } else{
             chatName = FindChatById.member1.name;
+            chatUserId =  FindChatById.member1.id;
         }
+
+        const findById = await User.findOne({_id: chatUserId}, {email: 1});
         await Message.updateMany({
             chatId:chatId,
             "from.id": {$nin: [loggedUserId]}
         }, {$set: {read: true}});
-        return res.render('index', {indexResponse: indexResponse, chatName, user: req.name, loggedUserId});
+        return res.render('index', {indexResponse: indexResponse, chatName, user: req.name, loggedUserId, chatUserMail : findById.email});
 
     } catch (error) {
         console.log(error);
-        return res.render('index', {indexResponse: indexResponse, chatName, user: req.name, loggedUserId});
+        return res.render('index', {indexResponse: indexResponse, chatName: '', user: req.name, loggedUserId, chatUserMail : ''});
     }
 });
 
