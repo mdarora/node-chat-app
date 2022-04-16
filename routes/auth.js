@@ -1,22 +1,11 @@
 const express = require('express');
 const router = express.Router();
 const bcrypt = require('bcryptjs');
-const nodemailer = require('nodemailer');
 const jwt = require('jsonwebtoken');
 const authLogin = require('../middleware/authLogin');
 
 
 const User = require('../db/models/userSchema');
-
-
-
-const transporter = nodemailer.createTransport({
-    service : 'gmail',
-    auth : {
-        user : process.env.MAIL,
-        pass : process.env.MAIL_PASS
-    }
-});
 
 
 
