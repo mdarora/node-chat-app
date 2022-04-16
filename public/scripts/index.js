@@ -184,9 +184,11 @@ document.getElementById("more").addEventListener('click', ()=>{
     document.getElementById("more-list").hidden = !document.getElementById("more-list").hidden;
 });
 
-document.getElementById("conv-more").addEventListener('click', ()=>{
-    document.getElementById("conv-more-list").hidden = !document.getElementById("conv-more-list").hidden;
-});
+if(chatId){
+    document.getElementById("conv-more").addEventListener('click', ()=>{
+        document.getElementById("conv-more-list").hidden = !document.getElementById("conv-more-list").hidden;
+    });
+}
 
 
 
