@@ -184,7 +184,12 @@ router.get('/chat/:id', loginAuth, async (req, res) =>{
             chatUserId =  FindChatById.member1.id;
         }
 
+
+
         const findById = await User.findOne({_id: chatUserId}, {email: 1});
+        if (!findById){
+            return res.render('index', {indexResponse: "User not found!", chatName, user: req.name, loggedUserId, chatUserMail : "User not found!"});
+        }
         await Message.updateMany({
             chatId:chatId,
             "from.id": {$nin: [loggedUserId]}
