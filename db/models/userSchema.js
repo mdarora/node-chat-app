@@ -14,6 +14,14 @@ const userSchema = new mongoose.Schema({
         type : String,
         required : true
     },
+    secureQuestion:{
+        type : String,
+        required : true
+    },
+    secureAnswer: {
+        type : String,
+        required : true
+    },
     dateJoined : {
         type : String,
         default : Date.now
