@@ -12,7 +12,6 @@ const User = require('../db/models/userSchema');
 //////////////////////////-Global variables-///////////////////////////////////
 
 let loginPageResponse = '';
-let resetResponse = '';
 
 ///////////////////////////-Routes-/////////////////////////////////////
 router.get('/login', authLogin, (req, res)=>{
@@ -98,31 +97,38 @@ router.post("/register", authLogin,  async (req, res)=>{
         return res.render('register', {error : "Something went wrong!"});
     }
 });
-
+ 
 router.get('/reset-password', authLogin, (req, res) =>{
-    resetResponse = '';
-    res.render('resetPassword', {resetResponse});
+    res.render('resetPassword', {resetResponse: '', secureQuestion:  '', email: ''});
 });
 
 
 router.post('/reset-password', authLogin, async (req, res) => {
-    const email = req.body.email;
-    const newPassword = req.body.newPassword;
-    const newCPassword = req.body.newCPassword;
+    let resetResponse = '';
+    const {email, newPassword, newCPassword, secureQuestion, secureAnswer} = req.body;
 
-    if (!email || !newPassword || !newCPassword){
-        resetResponse = 'All fields are required';
+    if (!email && !secureAnswer){
+        resetResponse = 'Enter Email';
         return res.render('resetPassword', {resetResponse});
-    } else if (newPassword !== newCPassword){
-        resetResponse = 'Both passwords must be same';
-        return res.render('resetPassword', {resetResponse});
-    }
+    } 
+    
 
     try {
-        const findByEmail = await User.findOne({email: email}, {_id : 1});
+        const findByEmail = await User.findOne({email: email}, {_id : 1, secureQuestion : 1, secureAnswer : 1});
         if (!findByEmail){
             resetResponse = 'Invalid E-mail.';
-            return res.render('resetPassword', {resetResponse});
+            return res.render('resetPassword', {resetResponse, secureQuestion: '', email: ''});
+        } else if(!secureAnswer) {
+            resetResponse = 'Please enter your security answer';
+            return res.render('resetPassword', {resetResponse, secureQuestion: findByEmail.secureQuestion, email});
+        }
+
+        if(findByEmail.secureAnswer !== secureAnswer){
+            resetResponse = 'Incorrect Answer';
+            return res.render('resetPassword', {resetResponse, secureQuestion: findByEmail.secureQuestion, email});
+        } else if (newPassword !== newCPassword){
+            resetResponse = 'Both passwords must be same';
+            return res.render('resetPassword', {resetResponse, secureQuestion: findByEmail.secureQuestion, email});
         }
 
         const hashedPassword = await bcrypt.hash(newPassword, 12);
