@@ -55,9 +55,9 @@ router.get('/register', authLogin,  (req, res) =>{
 
 router.post("/register", authLogin,  async (req, res)=>{
 
-    const {name, email, password, cpassword} = req.body;
+    const {name, email, password, cpassword, secureQuestion, secureAnswer} = req.body;
 
-    if (!name || !email || !password || !cpassword) {
+    if (!name || !email || !password || !cpassword || !secureQuestion || !secureAnswer) {
         return res.render('register', {error : "All fields are required"});
     } else if (password.length < 6){
         return res.render('register', {error : "Password should be atleast 6 characters long."});
@@ -65,6 +65,8 @@ router.post("/register", authLogin,  async (req, res)=>{
         return res.render('register', {error : "Name must be in between 3-30 characters"});
     } else if (password !== cpassword){
         return res.render('register', {error : "Both passwords must be same"});
+    } else if(secureAnswer.length < 5){
+        return res.render('register', {error : "At least 5 characters for security answer are required!"});
     }
 
     try {
@@ -77,7 +79,9 @@ router.post("/register", authLogin,  async (req, res)=>{
         const regUser = {
             name,
             email,
-            password : hashedPassword
+            password : hashedPassword,
+            secureQuestion,
+            secureAnswer
         }
         const newUser = new User(regUser);
 
