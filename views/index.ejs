@@ -144,10 +144,16 @@
             </div>
 
             <div class="conv-footer conv-childs">
+                
+            <% if( indexResponse == "User not found!"){ %>
+                <h2 class="text-center text-danger p-4">User not found!</h2>
+            <% } else { %>
                 <form id='message-form'>
                     <input class='message-input' type="text" name="message" id="message" placeholder='Write your message...' autocomplete="off" required/>
                     <button type="submit"> <i class="fas fa-paper-plane"></i> </button>
                 </form>
+            <% } %>
+                
             </div>
 
         </section>
